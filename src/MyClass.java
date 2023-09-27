@@ -12,7 +12,8 @@ public class MyClass {
     WebDriver driver = new ChromeDriver();
     String expectedMobileNumber = "+966554400000" ;
     String expectedCurrency = "SAR" ;
-    String expectedLanguage = "English" ;
+    String expectedLanguageEnglish = "English" ;
+    String expectedLanguageAr = "ar" ;
     String expectedClickedButton = "طيران" ;
 
     @BeforeMethod
@@ -30,8 +31,12 @@ public class MyClass {
     	myAssert.assertEquals(actualMobileNumber, expectedMobileNumber , "This is To Check The Mobile Number");
 
         // Check the Language
-    	String actualLanguage = driver.findElement(By.className("sc-gkFcWv")).getText();
-        myAssert.assertEquals(expectedLanguage, actualLanguage , "This is To Check The Language");
+    	String actualLanguageEnglish = driver.findElement(By.className("sc-gkFcWv")).getText();
+        myAssert.assertEquals(expectedLanguageEnglish, actualLanguageEnglish , "This is To Check The Language");
+        
+        // Another way to check the language
+        String actualLanguageAr = driver.findElement(By.tagName("html")).getAttribute("Lang");
+        myAssert.assertEquals(expectedLanguageAr, actualLanguageAr , "This is To Check The Language");
         
         
         // Check the Currency
@@ -52,3 +57,4 @@ public class MyClass {
     	
     }
 }
+
