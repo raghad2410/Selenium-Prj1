@@ -1,6 +1,5 @@
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -9,55 +8,47 @@ import org.testng.asserts.SoftAssert;
 
 public class MyClass {
 
-    private WebDriver driver;
-    private SoftAssert softAssert;
+    SoftAssert myAssert = new  SoftAssert();
+    WebDriver driver = new ChromeDriver();
+    String expectedMobileNumber = "+966554400000" ;
+    String expectedCurrency = "SAR" ;
+    String expectedLanguage = "English" ;
+    String expectedClickedButton = "طيران" ;
 
     @BeforeMethod
     public void myBeforeMethod() {
-        // Set the WebDriver executable path (Replace with the actual path to chromedriver.exe)
-        System.setProperty("webdriver.chrome.driver", "C:\\path\\to\\chromedriver.exe");
-
-        // Initialize the WebDriver instance
-        driver = new ChromeDriver();
-
-        // Navigate to the website
-        driver.get("https://global.almosafer.com/ar");
-
-        // Initialize SoftAssert for assertions
-        softAssert = new SoftAssert();
+    	
     }
 
     @Test
     public void testAlmosaferWebsite() {
-        // Find and click the button with the class name "sc-jTzLTM"
-        WebElement theButton = driver.findElement(By.className("sc-jTzLTM"));
-        theButton.click();
+    	// To Enter Almosafer Website
+    	driver.get("https://www.almosafer.com/ar?ncr=1");
+    	
+    	// Check the Mobile Number
+    	String  actualMobileNumber = driver.findElement(By.className("sc-hUfwpO")).getText();
+    	myAssert.assertEquals(actualMobileNumber, expectedMobileNumber , "This is To Check The Mobile Number");
 
-        // 1. Check the language
-        WebElement languageElement = driver.findElement(By.cssSelector("[data-testid='Header__LanguageSwitch']"));
-        String language = languageElement.getText();
-        softAssert.assertEquals(language, "English", "Language is not as expected.");
+        // Check the Language
+    	String actualLanguage = driver.findElement(By.className("sc-gkFcWv")).getText();
+        myAssert.assertEquals(expectedLanguage, actualLanguage , "This is To Check The Language");
+        
+        
+        // Check the Currency
+    	String actualCurrency = driver.findElement(By.className("sc-dRFtgE")).getText();
+        myAssert.assertEquals(expectedCurrency, actualCurrency , "This is To Check The Currancy");
+        
+        
+        // Check the FlightTab
+        String actualClickedButton = driver.findElement(By.xpath("//*[@aria-selected='true']")).getText();
+        myAssert.assertEquals(expectedClickedButton, actualClickedButton , "This is To Check The Clicked Button");
+        
 
-        // 2. Check the currency
-        WebElement currencyElement = driver.findElement(By.cssSelector("[data-testid='Header__CurrencySelector']"));
-        String currency = currencyElement.getText();
-        softAssert.assertEquals(currency, "SAR", "Currency is not as expected.");
-
-        // 3. Check the hotel tab is selected
-        WebElement hotelTab = driver.findElement(By.xpath("//a[contains(@class, 'active') and contains(@href, '/hotels')]"));
-        softAssert.assertTrue(hotelTab.isDisplayed(), "Hotel tab is not selected.");
-
-        // Perform additional test steps as needed
-
-        // Use softAssert.assertAll() to report all assertion failures
-        softAssert.assertAll();
+        myAssert.assertAll();
     }
 
     @AfterMethod
     public void myAfterMethod() {
-        // Close the WebDriver instance after each test
-        if (driver != null) {
-            driver.quit();
-        }
+    	
     }
 }
